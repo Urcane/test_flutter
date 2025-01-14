@@ -439,28 +439,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  Future<void> _logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-
-    if (token != null) {
-      final response = await http.post(
-        Uri.parse('https://demo.urproj.com/api/logout'),
-        headers: {'Authorization': 'Bearer $token'},
-      );
-
-      if (response.statusCode == 200) {
-        await prefs.remove('token');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logout failed.')),
-        );
-      }
-    }
-  }
 }
