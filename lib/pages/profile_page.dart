@@ -67,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Andika Rizky S (2211003)',
+                    'Andika Rizky S (2211001)',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w500,
