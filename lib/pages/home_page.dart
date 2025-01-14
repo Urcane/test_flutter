@@ -324,8 +324,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ToggleButtons(
                   borderRadius: BorderRadius.circular(10),
-                  selectedColor: Colors.indigoAccent,
-                  fillColor: Colors.indigoAccent,
+                  selectedColor: const Color.fromARGB(255, 161, 67, 205),
+                  fillColor: const Color.fromARGB(255, 161, 67, 205),
                   isSelected: const [true],
                   children: const [
                     Padding(
@@ -345,19 +345,19 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Tuesday',
+                      'Wednesday',
                       style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      '13.12',
+                      '15.24',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Text(
-                      'DEC',
+                      'JAN',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -373,16 +373,16 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'New York',
+                      'WIB',
                       style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                     ),
                     const SizedBox(height: 20),
                     const Text(
-                      '6:20 PM',
+                      '2:20 PM',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'United Kingdom',
+                      'WITA',
                       style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                     ),
                   ],
@@ -415,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                     startTime: todo['start_time'],
                     endTime: todo['end_time'],
                     duration: duration.inMinutes, 
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: const Color.fromARGB(255, 161, 67, 205),
                     participants: const [],
                     onUpdate: () => _updateTodo(
                       todo['id'],

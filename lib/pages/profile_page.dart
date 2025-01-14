@@ -102,7 +102,7 @@ class ProfilePage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  backgroundColor: Colors.indigoAccent,
+                  backgroundColor: const Color.fromARGB(255, 161, 67, 205),
                   iconColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   minimumSize: const Size(double.infinity, 48), // Full-width button
