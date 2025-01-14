@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:karunia_test_flutter/auth/login_page.dart';
-import 'package:karunia_test_flutter/auth/register_page.dart';
+import 'package:test_flutter/auth/login_page.dart';
+import 'package:test_flutter/auth/register_page.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({super.key});
@@ -35,7 +35,7 @@ class Welcome extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             const Text(
               'Catch the moment every detail with RecogNotes.\n Record conversations, lectures, meetings, and more, and watch as they are transcribed into accurate text instantly.',
               style: TextStyle(
@@ -44,7 +44,7 @@ class Welcome extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -77,17 +77,17 @@ class Welcome extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const RegisterPage()),
                     );
                   },
-                  child: Text(
-                    'Register',
-                    style: TextStyle(
-                      color: const Color.fromARGB(255, 161, 67, 205),
-                    ),
-                  ),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: const Color.fromARGB(255, 161, 67, 205)),
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    side: const BorderSide(color: Color.fromARGB(255, 161, 67, 205)),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0), // Rounded corners
+                    ),
+                  ),
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 161, 67, 205),
                     ),
                   ),
                 ),

@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:karunia_test_flutter/pages/home_page.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_flutter/pages/profile_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -19,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> register() async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/api/register'),
+      Uri.parse('https://demo.urproj.com/api/register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'name': nameController.text,
@@ -42,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const ProfilePage()),
       );
     } else {
       showResponseMessage(response.body, context);
@@ -50,32 +51,40 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void showResponseMessage(String responseBody, BuildContext context) {
-    final data = jsonDecode(responseBody);
-    final bool success = data['success'];
-    final String message = data['message'];
-    final Map<String, dynamic> errorData = data['data'] ?? {};
+    try {
+      final data = jsonDecode(responseBody);
+      final bool success = data['success'];
+      final String message = data['message'];
+      final Map<String, dynamic> errorData = data['data'] ?? {};
 
-    List<String> errorMessages = [];
+      List<String> errorMessages = [];
 
-    if (!success) {
-      errorMessages.add(message);
+      if (!success) {
+        errorMessages.add(message);
 
-      errorData.forEach((key, value) {
-        if (value is List) {
-          for (var error in value) {
-            errorMessages.add(error);
+        errorData.forEach((key, value) {
+          if (value is List) {
+            for (var error in value) {
+              errorMessages.add(error);
+            }
           }
-        }
-      });
-
-      for (var errorMessage in errorMessages) {
-        Future.delayed(const Duration(milliseconds: 200), () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(errorMessage)),
-          );
         });
+
+        for (var errorMessage in errorMessages) {
+          Future.delayed(const Duration(milliseconds: 200), () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(errorMessage)),
+            );
+          });
+        }
+    }
+    } catch (e, st) {
+      if (kDebugMode) {
+        print('$e');
+        print('$st');
       }
     }
+    
   }
 
   @override

@@ -1,11 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:karunia_test_flutter/pages/home_page.dart';
+import 'package:test_flutter/pages/home_page.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_flutter/pages/profile_page.dart';
 import 'register_page.dart'; // Import the RegisterPage
-import '/pages/home_page.dart'; // Import the HomePage
-import 'package:flutter_svg/flutter_svg.dart'; // For SVG icons
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,64 +25,81 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _checkAuthentication() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
 
-    if (token != null) {
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/auth'),
-        headers: {'Authorization': 'Bearer $token'},
-      );
-
-      if (response.statusCode == 200) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+      if (token != null) {
+        final response = await http.get(
+          Uri.parse('https://demo.urproj.com/api/auth'),   
+          headers: {'Authorization': 'Bearer $token'},
         );
-      } else {
-        // Token is invalid, clear the token and show login page
-        await prefs.remove('token');
+
+        if (response.statusCode == 200) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else {
+          // Token is invalid, clear the token and show login page
+          await prefs.remove('token');
+        }
+      }
+    } catch (e, st) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed.')),
+      );
+      if (kDebugMode) {
+        print("$e");
+        print("$st");
       }
     }
   }
 
   Future<void> login() async {
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/api/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': emailController.text,
-        'password': passwordController.text,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final token = data['data']['token'];
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-
-      // Validate the token
-      final authResponse = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/auth'),
-        headers: {'Authorization': 'Bearer $token'},
+    try {
+      final response = await http.post(
+        Uri.parse('https://demo.urproj.com/api/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': emailController.text,
+          'password': passwordController.text,
+        }),
       );
 
-      if (authResponse.statusCode == 200) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final token = data['data']['token'];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
+
+        // Validate the token
+        final authResponse = await http.get(
+          Uri.parse('https://demo.urproj.com/api/auth'),
+          headers: {'Authorization': 'Bearer $token'},
         );
+
+        if (authResponse.statusCode == 200) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Invalid token after login.')),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid token after login.')),
+          const SnackBar(content: Text('Login failed.')),
         );
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login failed.')),
-      );
+    } catch (e, st) {
+      if (kDebugMode) {
+        print("$e");
+        print("$st");
+      }
     }
   }
 
@@ -96,20 +113,20 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 50),
               Image.asset(
-                'assets/images/urcane_logo.png',
+                'assets/images/LOGO-website.png',
                 height: 100,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Catch all of your ideas!',
                 style: TextStyle(
                   fontSize: 14,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
         
               // Email TextField
               TextField(
@@ -128,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
         
               // Password TextField
               TextField(
@@ -149,11 +166,13 @@ class _LoginPageState extends State<LoginPage> {
                   suffixIcon: const Icon(Icons.visibility_off),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: login,
+                onPressed: () async { 
+                  await login();
+                },
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -170,20 +189,20 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: const Text('create an account'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
         
               // Divider Text
-              Row(
+              const Row(
                 children: [
                   Expanded(child: Divider(thickness: 1)),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text("or"),
                   ),
                   Expanded(child: Divider(thickness: 1)),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
         
               // Google Sign-up Button
               ElevatedButton.icon(
@@ -197,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 label: const Text('Sign up with Google'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -205,20 +224,20 @@ class _LoginPageState extends State<LoginPage> {
                   overlayColor: Colors.black,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
         
               // Apple Sign-up Button
               ElevatedButton.icon(
                 onPressed: () {
                   // Handle Apple Sign-In
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.apple,
                   size: 24,
                 ),
                 label: const Text('Sign up with Apple'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

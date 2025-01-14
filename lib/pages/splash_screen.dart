@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:karunia_test_flutter/auth/welcome.dart';
+import 'package:test_flutter/auth/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '/auth/login_page.dart'; // Import the LoginPage
 import '/pages/home_page.dart'; // Import the HomePage
 import 'package:http/http.dart' as http;
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (token != null) {
       // Validate the token
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:8000/api/auth'),
+        Uri.parse('https://demo.urproj.com/api/auth'),
         headers: {'Authorization': 'Bearer $token'},
       );
 
